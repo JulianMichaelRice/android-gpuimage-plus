@@ -69,9 +69,12 @@ class CameraDemoActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        //Get rid of the Application name and stuff like that above the camera so it can be fullscreen
         requestWindowFeature(Window.FEATURE_NO_TITLE)
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN)
         supportActionBar?.setDisplayShowTitleEnabled(false)
+
+        //Set it up!
         setContentView(R.layout.activity_camera_demo)
 
 //        lastVideoPathFileName = FileUtil.getPathInPackage(CameraDemoActivity.this, true) + "/lastVideoPath.txt";
@@ -81,6 +84,8 @@ class CameraDemoActivity : AppCompatActivity() {
         mCameraView = findViewById(R.id.myGLSurfaceView) as CameraRecordGLSurfaceView
         mCameraView!!.presetCameraForward(false)
         val seekBar = findViewById(R.id.globalRestoreSeekBar) as SeekBar
+
+        //TAKE A PICTURE! :)
         takePicBtn.setOnClickListener {
             showText("Taking Picture...")
             mCameraView!!.takePicture(TakePictureCallback { bmp ->
@@ -162,6 +167,7 @@ class CameraDemoActivity : AppCompatActivity() {
                 mCameraView!!.setFitFullView(shouldFit)
             }
         })
+        //NOTE!! The video's resolution/ratio isn't the same as the phone. So it zooms to fit in this case
         mCameraView!!.setFitFullView(true)
         mCameraView!!.setOnTouchListener { v, event ->
             when (event.actionMasked) {
