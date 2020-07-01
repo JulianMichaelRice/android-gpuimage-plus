@@ -1,29 +1,29 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:tools="http://schemas.android.com/tools"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:paddingBottom="@dimen/activity_vertical_margin"
-                android:paddingLeft="@dimen/activity_horizontal_margin"
-                android:paddingRight="@dimen/activity_horizontal_margin"
-                android:paddingTop="@dimen/activity_vertical_margin"
-                tools:context=".CameraDemoActivity">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/demoView"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    tools:context=".CameraDemoActivity">
 
     <FrameLayout
         android:id="@+id/glviewFrameLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        >
+        android:layout_height="match_parent">
 
         <org.wysaid.view.CameraRecordGLSurfaceView
             android:id="@+id/myGLSurfaceView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent" />
 
         <SeekBar
             android:id="@+id/globalRestoreSeekBar"
             android:layout_width="match_parent"
             android:layout_height="80dp"
-            android:layout_gravity="center_horizontal|top"/>
+            android:layout_gravity="center_horizontal|top" />
 
     </FrameLayout>
 
@@ -43,56 +43,56 @@
                 android:layout_width="100dp"
                 android:layout_height="match_parent"
                 android:text="TakePicture"
-                android:textAllCaps="false"/>
+                android:textAllCaps="false" />
 
             <Button
                 android:id="@+id/takeShotBtn"
                 android:layout_width="100dp"
                 android:layout_height="match_parent"
                 android:text="TakeShot"
-                android:textAllCaps="false"/>
+                android:textAllCaps="false" />
 
             <Button
                 android:id="@+id/pauseBtn"
                 android:layout_width="100dp"
                 android:layout_height="match_parent"
                 android:text="Pause"
-                android:textAllCaps="false"/>
+                android:textAllCaps="false" />
 
             <Button
                 android:id="@+id/resumeBtn"
                 android:layout_width="100dp"
                 android:layout_height="match_parent"
                 android:text="Resume"
-                android:textAllCaps="false"/>
+                android:textAllCaps="false" />
 
             <Button
                 android:id="@+id/switchCameraBtn"
                 android:layout_width="100dp"
                 android:layout_height="match_parent"
                 android:text="Switch"
-                android:textAllCaps="false"/>
+                android:textAllCaps="false" />
 
             <Button
                 android:id="@+id/recordBtn"
                 android:layout_width="100dp"
                 android:layout_height="match_parent"
                 android:text="Record"
-                android:textAllCaps="false"/>
+                android:textAllCaps="false" />
 
             <Button
                 android:id="@+id/flashBtn"
                 android:layout_width="100dp"
                 android:layout_height="match_parent"
                 android:text="Flash"
-                android:textAllCaps="false"/>
+                android:textAllCaps="false" />
 
             <Button
                 android:id="@+id/fitViewBtn"
                 android:layout_width="100dp"
                 android:layout_height="match_parent"
                 android:text="fitScreen"
-                android:textAllCaps="false"/>
+                android:textAllCaps="false" />
 
             <Button
                 android:id="@+id/customFilterBtn"
@@ -100,8 +100,7 @@
                 android:layout_height="match_parent"
                 android:onClick="customFilterClicked"
                 android:text="Custom"
-                android:textAllCaps="false"
-                />
+                android:textAllCaps="false" />
 
             <Button
                 android:id="@+id/dynamicFilterBtn"
@@ -109,8 +108,7 @@
                 android:layout_height="match_parent"
                 android:onClick="dynamicFilterClicked"
                 android:text="Dynamic"
-                android:textAllCaps="false"
-                />
+                android:textAllCaps="false" />
 
         </LinearLayout>
     </HorizontalScrollView>

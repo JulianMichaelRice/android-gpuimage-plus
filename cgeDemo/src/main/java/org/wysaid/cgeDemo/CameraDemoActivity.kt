@@ -11,10 +11,7 @@ import android.view.*
 import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.SeekBar
-import android.widget.SeekBar.OnSeekBarChangeListener
 import org.wysaid.camera.CameraInstance
-import org.wysaid.cgeDemo.CameraDemoActivity
-import org.wysaid.cgeDemo.CameraDemoActivity.Companion.instance
 import org.wysaid.myUtils.FileUtil
 import org.wysaid.myUtils.ImageUtil
 import org.wysaid.myUtils.MsgUtil
@@ -30,6 +27,15 @@ class CameraDemoActivity : AppCompatActivity() {
     }
 
     class MyButtons(context: Context?, var filterConfig: String) : android.support.v7.widget.AppCompatButton(context)
+    var filterIndex = 0
+    var myFilters = listOf(
+            MainActivity.EFFECT_CONFIGS[0], // Normal
+            MainActivity.EFFECT_CONFIGS[76], // Beautify
+            MainActivity.EFFECT_CONFIGS[53], // Black & White
+            MainActivity.EFFECT_CONFIGS[4], //  Inverted
+            MainActivity.EFFECT_CONFIGS[41], // Red Flare
+            MainActivity.EFFECT_CONFIGS[2] // Pencil
+    )
 
     internal inner class RecordListener : View.OnClickListener {
         var isValid = true
@@ -67,6 +73,73 @@ class CameraDemoActivity : AppCompatActivity() {
         }
     }
 
+    internal inner class OnSwipeTouchListener internal constructor(ctx: Context, mainView: View) : View.OnTouchListener {
+        private val gestureDetector: GestureDetector
+        var context: Context
+
+        private val SWIPE_THRESHOLD = 100
+        private val SWIPE_VELOCITY_THRESHOLD = 100
+
+        init {
+            gestureDetector = GestureDetector(ctx, GestureListener())
+            mainView.setOnTouchListener(this)
+            context = ctx
+        }
+
+
+        override fun onTouch(v: View?, event: MotionEvent?): Boolean {
+            return gestureDetector.onTouchEvent(event)
+        }
+
+        inner class GestureListener : GestureDetector.SimpleOnGestureListener() {
+            override fun onDown(e: MotionEvent): Boolean {
+                return true
+            }
+
+            fun onSwipeRight() {
+                filterIndex = ((filterIndex - 1) % myFilters.size)
+                Log.i("Filter", "Index: $filterIndex")
+                mCameraView!!.setFilterWithConfig(myFilters[Math.abs(filterIndex)])
+                mCurrentConfig = myFilters[filterIndex]
+                // Toast.makeText(context, "Swiped Right", Toast.LENGTH_SHORT).show()
+            }
+
+            fun onSwipeLeft() {
+                filterIndex = ((filterIndex + 1) % myFilters.size)
+                Log.i("Filter", "Index: $filterIndex")
+                mCameraView!!.setFilterWithConfig(myFilters[Math.abs(filterIndex)])
+                mCurrentConfig = myFilters[filterIndex]
+                // Toast.makeText(context, "Swiped Left", Toast.LENGTH_SHORT).show()
+            }
+
+            override fun onFling(e1: MotionEvent, e2: MotionEvent, velocityX: Float, velocityY: Float): Boolean {
+                var result = false
+                try {
+                    val diffY = e2.y - e1.y
+                    val diffX = e2.x - e1.x
+                    if (Math.abs(diffX) > Math.abs(diffY)) {
+                        if (Math.abs(diffX) > SWIPE_THRESHOLD && Math.abs(velocityX) > SWIPE_VELOCITY_THRESHOLD) {
+                            if (diffX > 0) {
+                                onSwipeRight()
+                            } else {
+                                onSwipeLeft()
+                            }
+                            result = true
+                        }
+                    }
+                } catch (exception: Exception) {
+                    exception.printStackTrace()
+                }
+                return result
+            }
+
+        }
+
+
+
+    }
+
+    private lateinit var onSwipeTouchListener: OnSwipeTouchListener
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         //Get rid of the Application name and stuff like that above the camera so it can be fullscreen
@@ -117,7 +190,7 @@ class CameraDemoActivity : AppCompatActivity() {
             button.setOnClickListener(mFilterSwitchListener)
             layout.addView(button)
         }
-        seekBar.setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
+        seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
                 val intensity = progress / 100.0f
                 mCameraView!!.setFilterIntensity(intensity)
@@ -169,26 +242,27 @@ class CameraDemoActivity : AppCompatActivity() {
         })
         //NOTE!! The video's resolution/ratio isn't the same as the phone. So it zooms to fit in this case
         mCameraView!!.setFitFullView(true)
-        mCameraView!!.setOnTouchListener { v, event ->
-            when (event.actionMasked) {
-                MotionEvent.ACTION_DOWN -> {
-                    Log.i(LOG_TAG, String.format("Tap to focus: %g, %g", event.x, event.y))
-                    val focusX = event.x / mCameraView!!.width
-                    val focusY = event.y / mCameraView!!.height
-                    mCameraView!!.focusAtPoint(focusX, focusY) { success, camera ->
-                        if (success) {
-                            Log.e(LOG_TAG, String.format("Focus OK, pos: %g, %g", focusX, focusY))
-                        } else {
-                            Log.e(LOG_TAG, String.format("Focus failed, pos: %g, %g", focusX, focusY))
-                            mCameraView!!.cameraInstance().setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_VIDEO)
-                        }
-                    }
-                }
-                else -> {
-                }
-            }
-            true
-        }
+//        mCameraView!!.setOnTouchListener { v, event ->
+//            when (event.actionMasked) {
+//                MotionEvent.ACTION_DOWN -> {
+//                    Log.i(LOG_TAG, String.format("Tap to focus: %g, %g", event.x, event.y))
+//                    val focusX = event.x / mCameraView!!.width
+//                    val focusY = event.y / mCameraView!!.height
+//                    mCameraView!!.focusAtPoint(focusX, focusY) { success, camera ->
+//                        if (success) {
+//                            Log.e(LOG_TAG, String.format("Focus OK, pos: %g, %g", focusX, focusY))
+//                        } else {
+//                            Log.e(LOG_TAG, String.format("Focus failed, pos: %g, %g", focusX, focusY))
+//                            mCameraView!!.cameraInstance().setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_VIDEO)
+//                        }
+//                    }
+//                }
+//                else -> {
+//                }
+//            }
+//            true
+//        }
+        onSwipeTouchListener = OnSwipeTouchListener(this, findViewById(R.id.demoView))
     }
 
     private val mFilterSwitchListener = View.OnClickListener { v ->
