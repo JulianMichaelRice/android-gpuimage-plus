@@ -11,6 +11,8 @@ import android.view.*
 import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.SeekBar
+import android.widget.SeekBar.OnSeekBarChangeListener
+import android.widget.Toast
 import org.wysaid.camera.CameraInstance
 import org.wysaid.myUtils.FileUtil
 import org.wysaid.myUtils.ImageUtil
@@ -97,17 +99,19 @@ class CameraDemoActivity : AppCompatActivity() {
             }
 
             fun onSwipeRight() {
-                filterIndex = ((filterIndex - 1) % myFilters.size)
+                filterIndex = filterIndex - 1
+                var useIndex = (filterIndex % myFilters.size)
                 Log.i("Filter", "Index: $filterIndex")
-                mCameraView!!.setFilterWithConfig(myFilters[Math.abs(filterIndex)])
+                mCameraView!!.setFilterWithConfig(myFilters[useIndex])
                 mCurrentConfig = myFilters[filterIndex]
                 // Toast.makeText(context, "Swiped Right", Toast.LENGTH_SHORT).show()
             }
 
             fun onSwipeLeft() {
-                filterIndex = ((filterIndex + 1) % myFilters.size)
+                filterIndex = filterIndex + 1
+                var useIndex = ( filterIndex % myFilters.size)
                 Log.i("Filter", "Index: $filterIndex")
-                mCameraView!!.setFilterWithConfig(myFilters[Math.abs(filterIndex)])
+                mCameraView!!.setFilterWithConfig(myFilters[useIndex])
                 mCurrentConfig = myFilters[filterIndex]
                 // Toast.makeText(context, "Swiped Left", Toast.LENGTH_SHORT).show()
             }
@@ -190,15 +194,15 @@ class CameraDemoActivity : AppCompatActivity() {
             button.setOnClickListener(mFilterSwitchListener)
             layout.addView(button)
         }
-        seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-            override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
-                val intensity = progress / 100.0f
-                mCameraView!!.setFilterIntensity(intensity)
-            }
-
-            override fun onStartTrackingTouch(seekBar: SeekBar) {}
-            override fun onStopTrackingTouch(seekBar: SeekBar) {}
-        })
+//        seekBar.setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
+//            override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
+//                val intensity = progress / 100.0f
+//                mCameraView!!.setFilterIntensity(intensity)
+//            }
+//
+//            override fun onStartTrackingTouch(seekBar: SeekBar) {}
+//            override fun onStopTrackingTouch(seekBar: SeekBar) {}
+//        })
         instance = this
         val switchBtn = findViewById(R.id.switchCameraBtn) as Button
         switchBtn.setOnClickListener { mCameraView!!.switchCamera() }
