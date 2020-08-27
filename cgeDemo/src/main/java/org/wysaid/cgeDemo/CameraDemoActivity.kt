@@ -13,8 +13,6 @@ import android.widget.LinearLayout
 import android.widget.SeekBar
 import android.widget.SeekBar.OnSeekBarChangeListener
 import org.wysaid.camera.CameraInstance
-import org.wysaid.cgeDemo.CameraDemoActivity
-import org.wysaid.cgeDemo.CameraDemoActivity.Companion.instance
 import org.wysaid.myUtils.FileUtil
 import org.wysaid.myUtils.ImageUtil
 import org.wysaid.myUtils.MsgUtil
@@ -77,7 +75,7 @@ class CameraDemoActivity : AppCompatActivity() {
         //Set it up!
         setContentView(R.layout.activity_camera_demo)
 
-//        lastVideoPathFileName = FileUtil.getPathInPackage(CameraDemoActivity.this, true) + "/lastVideoPath.txt";
+        //lastVideoPathFileName = FileUtil.getPathInPackage(CameraDemoActivity.this, true) + "/lastVideoPath.txt";
         val takePicBtn = findViewById(R.id.takePicBtn) as Button
         val takeShotBtn = findViewById(R.id.takeShotBtn) as Button
         val recordBtn = findViewById(R.id.recordBtn) as Button
@@ -122,7 +120,6 @@ class CameraDemoActivity : AppCompatActivity() {
                 val intensity = progress / 100.0f
                 mCameraView!!.setFilterIntensity(intensity)
             }
-
             override fun onStartTrackingTouch(seekBar: SeekBar) {}
             override fun onStopTrackingTouch(seekBar: SeekBar) {}
         })
